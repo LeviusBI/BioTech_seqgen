@@ -37,7 +37,7 @@ def main():
         random_sampler = RandomSampler(fasta_parser)
         cons_generator = ConsGenerator(chr_name=chr_name, vcf_parser=vcf_parser,
                                        fasta_parser=fasta_parser, random_sampler=random_sampler,
-                                       num_seqs=args.count, seq_length=args.length,min_af=args.minAF)
+                                       num_seqs=args.c, seq_length=args.L,min_af=args.minAF)
         
         sample_variants_dict, sequences = cons_generator.sample_variants()
         
@@ -45,13 +45,13 @@ def main():
         for sample, variants_list in sample_variants_dict.items():
             for start_pos, _ in sorted(sequences.items()):
                 consensus_seq = cons_generator.generate_consensus(
-                    sample, chr_name, start_pos, args.length, variants_list
+                    sample, chr_name, start_pos, args.L, variants_list
                 )
-                header = f">{sample}_consensus_{start_pos}_{start_pos + args.length - 1}"
+                header = f">{sample}_consensus_{start_pos}_{start_pos + args.L - 1}"
                 results.append(header)
                 results.append(consensus_seq)
         
-        with open(args.output, 'w') as f:
+        with open(args.O, 'w') as f:
             for line in results:
                 f.write(line + '\n')
         
